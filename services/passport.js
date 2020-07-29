@@ -15,12 +15,32 @@ passport.deserializeUser((id, done) => {
   });
 });
 
+// VISUAL FLOW
+// passport.serializeUser(function(user, done) {
+//   done(null, user.id);
+// });              │
+//                │ 
+//                │
+//                └─────────────────┬──→ saved to session
+//                                  │    req.session.passport.user = {id: '..'}
+//                                  │
+//                                  ↓           
+// passport.deserializeUser(function(id, done) {
+//                  ┌───────────────┘
+//                  │
+//                  ↓ 
+//   User.findById(id, function(err, user) {
+//       done(err, user);
+//   });            └──────────────→ user object attaches to the request as req.user   
+// });
+
 passport.use(
   new GoogleStrategy(
     {
       callbackURL: '/auth/google/callback',
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
       proxy: true
     },
     async (accessToken, refreshToken, profile, done) => {
