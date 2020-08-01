@@ -18,14 +18,14 @@ mongoose.Query.prototype.exec= async function(){
     if(!this._cache){
         return exec.apply(this,arguments)
     }
-    console.log('Run a query')
+   // console.log('Run a query')
     const key = JSON.stringify(Object.assign({},this.getQuery(),{collection:this.mongooseCollection.name}))
     // if modify the result of this.getQuery it might change the actual function
 
     const cacheValue=await client.hget(this.hashKey,key)
     // Use anonymous function for top-level await code
     if(cacheValue){
-        console.log(this)
+     //   console.log(this)
       //  return new this.model(JSON.parse(cacheValue)) -> doesn't work because JSON.parse(cacheValue) actually returns
       // array of objects rather than single object
         // same as new Blog({tille:'Hi',content:'Helllo'})
